@@ -4,7 +4,6 @@ from os import path
 from sys import argv, stderr
 
 if __name__ == "__main__":
-    print(len(argv))
     if len(argv) < 2:
         stderr.write("Usage: ./markdown2html.py README.md README.html\n")
         exit(1)
