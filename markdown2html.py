@@ -11,7 +11,7 @@ if __name__ == "__main__":
 
     for f in argv:
         f = './' + f
-        if not path.exists(f):
+        if not path.isfile(f):
             stderr.write("Missing {}\n".format(f))
             exit(1)
 
