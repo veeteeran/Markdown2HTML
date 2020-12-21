@@ -3,6 +3,7 @@
 from os import path
 from sys import argv, stderr
 
+
 def headings(markdown="", html=""):
     """
     Convert markdown headings
@@ -33,6 +34,7 @@ def headings(markdown="", html=""):
 
             h.write(line)
 
+
 def unordered(markdown="", html=""):
     """
     Convert markdown unordered list
@@ -58,6 +60,7 @@ def unordered(markdown="", html=""):
             h.write(line)
         if list_open:
             h.write('</ul>')
+
 
 def ordered(markdown="", html=""):
     """
