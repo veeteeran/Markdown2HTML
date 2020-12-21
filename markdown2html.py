@@ -8,7 +8,11 @@ def headings(markdown="", html=""):
     Convert markdown headings
         Args:
             markdown: file to read
+            html: file to write
     """
+    if markdown == "" or html == "":
+        return
+
     with open(markdown, 'r') as m, open(html, 'a') as h:
         for line in m:
             if not line.startswith('#'):
@@ -30,6 +34,15 @@ def headings(markdown="", html=""):
             h.write(line)
 
 def unordered(markdown="", html=""):
+    """
+    Convert markdown unordered list
+        Args:
+            markdown: file to read
+            html: file to write
+    """
+    if markdown == "" or html == "":
+        return
+
     with open(markdown, 'r') as m, open(html, 'a') as h:
         list_open = False
         for line in m:
@@ -47,6 +60,15 @@ def unordered(markdown="", html=""):
             h.write('</ul>')
 
 def ordered(markdown="", html=""):
+    """
+    Convert markdown ordered list
+        Args:
+            markdown: file to read
+            html: file to write
+    """
+    if markdown == "" or html == "":
+        return
+
     with open(markdown, 'r') as m, open(html, 'a') as h:
         list_open = False
         for line in m:
@@ -61,6 +83,26 @@ def ordered(markdown="", html=""):
                 line = '<li>' + line[2:] + '</li>'
             h.write(line)
         h.write('</ol>')
+
+# def paragraphs(markdown="", html=""):
+#     """
+#     Convert markdown paragraphs
+#         Args:
+#             markdown: file to read
+#             html: file to write
+#     """
+#     with open(markdown, 'r') as m, open(html, 'a') as h:
+#         line_start = False
+#         for line in m:
+#             if not line[0].isalpha():
+#                 line_start = False
+#                 continue
+
+#             if line[0].isalpha() and not line_start:
+#                 line = '<p>' + line
+#                 line_start = True
+
+#             if line == '\n':
 
 if __name__ == "__main__":
     if len(argv) < 2:
