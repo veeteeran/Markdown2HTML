@@ -34,6 +34,7 @@ def unordered(markdown="", html=""):
         list_open = False
         for line in m:
             if not line.startswith('- '):
+                list_open = False
                 continue
 
             if line.startswith('- ') and not list_open:
