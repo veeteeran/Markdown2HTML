@@ -43,7 +43,24 @@ def unordered(markdown="", html=""):
             elif line.startswith('- '):
                 line = '<li>' + line[2:] + '</li>'
             h.write(line)
-        h.write('</ul>')
+        if list_open:
+            h.write('</ul>')
+
+def ordered(markdown="", html=""):
+    with open(markdown, 'r') as m, open(html, 'a') as h:
+        list_open = False
+        for line in m:
+            if not line.startswith('* '):
+                list_open = False
+                continue
+
+            if line.startswith('* ') and not list_open:
+                line = '<ol><li>' + line[2:] + '</li>'
+                list_open = True
+            elif line.startswith('* '):
+                line = '<li>' + line[2:] + '</li>'
+            h.write(line)
+        h.write('</ol>')
 
 if __name__ == "__main__":
     if len(argv) < 2:
@@ -56,3 +73,4 @@ if __name__ == "__main__":
 
     headings(argv[1], argv[2])
     unordered(argv[1], argv[2])
+    ordered(argv[1], argv[2])
