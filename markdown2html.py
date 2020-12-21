@@ -37,7 +37,7 @@ def unordered(markdown="", html=""):
                 continue
 
             if line.startswith('- ') and not list_open:
-                line = '<u1><li>' + line[2:] + '</li>'
+                line = '<ul><li>' + line[2:] + '</li>'
                 list_open = True
             elif line.startswith('- '):
                 line = '<li>' + line[2:] + '</li>'
