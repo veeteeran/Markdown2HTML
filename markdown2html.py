@@ -3,14 +3,17 @@
 from os import path
 from sys import argv, stderr
 
-def headings(read_file="", write_file=""):
+def headings(markdown="", html=""):
     """
     Convert markdown headings
         Args:
-            read_file: file to read
+            markdown: file to read
     """
-    with open(read_file, 'r') as markdown, open(write_file, 'w') as html:
-        for line in markdown:
+    with open(markdown, 'r') as m, open(html, 'a') as h:
+        for line in m:
+            if not line.startswith('#'):
+                continue
+
             if line.startswith('# '):
                 line = '<h1>' + line[2:] + '</h1>'
             elif line.startswith('## '):
@@ -24,8 +27,22 @@ def headings(read_file="", write_file=""):
             elif line.startswith('###### '):
                 line = '<h6>' + line[7:] + '</h6>'
 
-            html.write(line)
+            h.write(line)
 
+def unordered(markdown="", html=""):
+    with open(markdown, 'r') as m, open(html, 'a') as h:
+        list_open = False
+        for line in m:
+            if not line.startswith('- '):
+                continue
+
+            if line.startswith('- ') and not list_open:
+                line = '<u1><li>' + line[2:] + '</li>'
+                list_open = True
+            elif line.startswith('- '):
+                line = '<li>' + line[2:] + '</li>'
+            h.write(line)
+        h.write('</ul>')
 
 if __name__ == "__main__":
     if len(argv) < 2:
@@ -37,3 +54,4 @@ if __name__ == "__main__":
         exit(1)
 
     headings(argv[1], argv[2])
+    unordered(argv[1], argv[2])
