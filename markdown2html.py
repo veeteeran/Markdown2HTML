@@ -4,6 +4,19 @@ from os import path
 from sys import argv, stderr
 
 
+def check_args(*args):
+    """
+    Check input for proper number of args 
+    """
+    for arg in args:
+        if len(arg) < 2:
+            stderr.write("Usage: ./markdown2html.py README.md README.html\n")
+            exit(1)
+        else:
+            if not path.isfile(arg[1]):
+                stderr.write("Missing {}\n".format(arg[1]))
+                exit(1)
+
 def headings(markdown="", html=""):
     """
     Convert markdown headings
@@ -87,35 +100,32 @@ def ordered(markdown="", html=""):
             h.write(line)
         h.write('</ol>')
 
-# def paragraphs(markdown="", html=""):
-#     """
-#     Convert markdown paragraphs
-#         Args:
-#             markdown: file to read
-#             html: file to write
-#     """
-#     with open(markdown, 'r') as m, open(html, 'a') as h:
-#         line_start = False
-#         for line in m:
-#             if not line[0].isalpha():
-#                 line_start = False
-#                 continue
+def paragraphs(markdown="", html=""):
+    """
+    Convert markdown paragraphs
+        Args:
+            markdown: file to read
+            html: file to write
+    """
+    with open(markdown, 'r') as m, open(html, 'a') as h:
+        line_start = False
+        for line in m:
+            if line == '\n' and line_start:
+                h.write('</p>')
+                continue
+
+            if not line[0].isalpha():
+                line_start = False
+                print('Not simple text')
 
 #             if line[0].isalpha() and not line_start:
 #                 line = '<p>' + line
 #                 line_start = True
 
-#             if line == '\n':
-
 if __name__ == "__main__":
-    if len(argv) < 2:
-        stderr.write("Usage: ./markdown2html.py README.md README.html\n")
-        exit(1)
 
-    if not path.isfile(argv[1]):
-        stderr.write("Missing {}\n".format(argv[1]))
-        exit(1)
-
-    headings(argv[1], argv[2])
-    unordered(argv[1], argv[2])
-    ordered(argv[1], argv[2])
+    check_args(argv)
+#    headings(argv[1], argv[2])
+#    unordered(argv[1], argv[2])
+#    ordered(argv[1], argv[2])
+#    paragraphs(argv[1], argv[2])
