@@ -17,63 +17,58 @@ def check_args(*args):
                 stderr.write("Missing {}\n".format(arg[1]))
                 exit(1)
 
-def headings(markdown="", html=""):
+def headings(line):
     """
     Convert markdown headings
         Args:
             markdown: file to read
             html: file to write
     """
-    if markdown == "" or html == "":
+    list_open = False
+
+    if not line.startswith('#'):
         return
 
-    with open(markdown, 'r') as m, open(html, 'a') as h:
-        for line in m:
-            if not line.startswith('#'):
-                continue
+    if line.startswith('# '):
+        line = '<h1>' + line[2:] + '</h1>'
+    elif line.startswith('## '):
+        line = '<h2>' + line[3:] + '</h2>'
+    elif line.startswith('### '):
+        line = '<h3>' + line[4:] + '</h3>'
+    elif line.startswith('#### '):
+        line = '<h4>' + line[5:] + '</h4>'
+    elif line.startswith('##### '):
+        line = '<h5>' + line[6:] + '</h5>'
+    elif line.startswith('###### '):
+        line = '<h6>' + line[7:] + '</h6>'
 
-            if line.startswith('# '):
-                line = '<h1>' + line[2:] + '</h1>'
-            elif line.startswith('## '):
-                line = '<h2>' + line[3:] + '</h2>'
-            elif line.startswith('### '):
-                line = '<h3>' + line[4:] + '</h3>'
-            elif line.startswith('#### '):
-                line = '<h4>' + line[5:] + '</h4>'
-            elif line.startswith('##### '):
-                line = '<h5>' + line[6:] + '</h5>'
-            elif line.startswith('###### '):
-                line = '<h6>' + line[7:] + '</h6>'
+    h.write(line)
 
-            h.write(line)
-
-
-def unordered(markdown="", html=""):
+def unordered(line):
     """
     Convert markdown unordered list
         Args:
             markdown: file to read
             html: file to write
     """
-    if markdown == "" or html == "":
+    list_open = False
+
+    if not line.startswith('- '):
         return
 
-    with open(markdown, 'r') as m, open(html, 'a') as h:
+    if line.startswith('- ') and not list_open:
+        line = '<ul><li>' + line[2:] + '</li>'
+        list_open = True
+    elif line.startswith('- '):
+        line = '<li>' + line[2:] + '</li>'
+
+    h.write(line)
+
+    if line == '\n' and list_open:
+        h.write('</ul>')
         list_open = False
-        for line in m:
-            if not line.startswith('- '):
-                list_open = False
-                continue
 
-            if line.startswith('- ') and not list_open:
-                line = '<ul><li>' + line[2:] + '</li>'
-                list_open = True
-            elif line.startswith('- '):
-                line = '<li>' + line[2:] + '</li>'
-            h.write(line)
-        if list_open:
-            h.write('</ul>')
-
+    h.write('</ul>')
 
 def ordered(markdown="", html=""):
     """
@@ -122,9 +117,46 @@ def paragraphs(markdown="", html=""):
 #                 line = '<p>' + line
 #                 line_start = True
 
+def convert(*args):
+    print(len(args))
+    check_args(args[0])
+    markdown = args[0][1]
+    html = args[0][2]
+    with open(markdown, 'r') as m, open(html, 'a') as h:
+        list_open = False
+        for line in m:
+            if line.startswith('# '):
+                line = '<h1>' + line[2:] + '</h1>'
+            elif line.startswith('## '):
+                line = '<h2>' + line[3:] + '</h2>'
+            elif line.startswith('### '):
+                line = '<h3>' + line[4:] + '</h3>'
+            elif line.startswith('#### '):
+                line = '<h4>' + line[5:] + '</h4>'
+            elif line.startswith('##### '):
+                line = '<h5>' + line[6:] + '</h5>'
+            elif line.startswith('###### '):
+                line = '<h6>' + line[7:] + '</h6>'
+
+            if line.startswith('- ') and not list_open:
+                line = '<ul><li>' + line[2:] + '</li>'
+                list_open = True
+            elif line.startswith('- '):
+                line = '<li>' + line[2:] + '</li>'
+
+            h.write(line)
+
+            if line == '\n' and list_open:
+                h.write('</ul>')
+                list_open = False
+
+        if list_open:
+            h.write('</ul>')
+
 if __name__ == "__main__":
 
-    check_args(argv)
+    convert(argv)
+#    check_args(argv)
 #    headings(argv[1], argv[2])
 #    unordered(argv[1], argv[2])
 #    ordered(argv[1], argv[2])
