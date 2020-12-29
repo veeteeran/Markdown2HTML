@@ -126,19 +126,19 @@ def convert(*args):
         p_open = False
         for line in m:
             # Headings
-            line = headings(line)
-#            if line.startswith('# '):
-#                line = '<h1>' + line[2:] + '</h1>'
-#            elif line.startswith('## '):
-#                line = '<h2>' + line[3:] + '</h2>'
-#            elif line.startswith('### '):
-#                line = '<h3>' + line[4:] + '</h3>'
-#            elif line.startswith('#### '):
-#                line = '<h4>' + line[5:] + '</h4>'
-#            elif line.startswith('##### '):
-#                line = '<h5>' + line[6:] + '</h5>'
-#            elif line.startswith('###### '):
-#                line = '<h6>' + line[7:] + '</h6>'
+#            line = headings(line)
+            if line.startswith('# '):
+                line = '<h1>' + line[2:] + '</h1>'
+            elif line.startswith('## '):
+                line = '<h2>' + line[3:] + '</h2>'
+            elif line.startswith('### '):
+                line = '<h3>' + line[4:] + '</h3>'
+            elif line.startswith('#### '):
+                line = '<h4>' + line[5:] + '</h4>'
+            elif line.startswith('##### '):
+                line = '<h5>' + line[6:] + '</h5>'
+            elif line.startswith('###### '):
+                line = '<h6>' + line[7:] + '</h6>'
 
             # Unordered lists
             if line.startswith('- ') and not ul_open:
