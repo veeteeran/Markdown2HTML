@@ -53,6 +53,7 @@ def unordered(line, ul_open=False):
 #    ul_open = False
 
     if not line.startswith('- '):
+        ul_open = False
         return (line, ul_open)
 
     if line.startswith('- ') and not ul_open:
@@ -63,8 +64,8 @@ def unordered(line, ul_open=False):
 
 #    h.write(line)
 
-    if line == '\n' and list_open:
-        h.write('</ul>')
+    if line == '\n' and ul_open:
+#        h.write('</ul>')
         ul_open = False
 
 #    h.write('</ul>')
