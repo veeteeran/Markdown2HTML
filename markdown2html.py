@@ -122,8 +122,10 @@ def convert(*args):
     markdown = args[0][1]
     html = args[0][2]
     with open(markdown, 'r') as m, open(html, 'a') as h:
-        list_open = False
+        ul_open = False
+        ol_open = False
         for line in m:
+            # Headings
             if line.startswith('# '):
                 line = '<h1>' + line[2:] + '</h1>'
             elif line.startswith('## '):
@@ -137,20 +139,36 @@ def convert(*args):
             elif line.startswith('###### '):
                 line = '<h6>' + line[7:] + '</h6>'
 
-            if line.startswith('- ') and not list_open:
+            # Unordered lists
+            if line.startswith('- ') and not ul_open:
                 line = '<ul><li>' + line[2:] + '</li>'
-                list_open = True
+                ul_open = True
             elif line.startswith('- '):
+                line = '<li>' + line[2:] + '</li>'
+
+            if line == '\n' and ul_open:
+                h.write('</ul>')
+                ul_open = False
+
+            # Ordered lists
+            if line.startswith('* ') and not ol_open:
+                line = '<ol><li>' + line[2:] + '</li>'
+                ol_open = True
+            elif line.startswith('* '):
                 line = '<li>' + line[2:] + '</li>'
 
             h.write(line)
 
-            if line == '\n' and list_open:
-                h.write('</ul>')
-                list_open = False
+            if line == '\n' and ol_open:
+                h.write('</ol>')
+                ol_open = False
 
-        if list_open:
+        # Close lists
+        if ul_open:
             h.write('</ul>')
+
+        if ol_open:
+            h.write('</ol>')
 
 if __name__ == "__main__":
 
