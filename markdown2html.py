@@ -145,16 +145,15 @@ def convert(*args):
             line = headings(line)
 
             # Unordered lists
-            line, ul_open = unordered(line, ul_open)
-#            if line.startswith('- ') and not ul_open:
-#                line = '<ul><li>' + line[2:] + '</li>'
-#                ul_open = True
-#            elif line.startswith('- '):
-#                line = '<li>' + line[2:] + '</li>'
+            if line.startswith('- ') and not ul_open:
+                line = '<ul><li>' + line[2:] + '</li>'
+                ul_open = True
+            elif line.startswith('- '):
+                line = '<li>' + line[2:] + '</li>'
 
-#            if line == '\n' and ul_open:
-#                h.write('</ul>')
-#                ul_open = False
+            if line == '\n' and ul_open:
+                h.write('</ul>')
+                ul_open = False
 
             # Ordered lists
             if line.startswith('* ') and not ol_open:
