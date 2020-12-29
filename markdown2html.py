@@ -43,7 +43,7 @@ def headings(line):
 
     return line
 
-def unordered(line, ul_open):
+def unordered(line, ul_open=False):
     """
     Convert markdown unordered list
         Args:
@@ -111,6 +111,21 @@ def paragraphs(markdown="", html=""):
             if not line[0].isalpha():
                 line_start = False
 
+def bold(line)
+    """
+    Convert markdown paragraphs
+        Args:
+            line: line to read
+    """
+    if '**' in line:
+        pattern = '([**]).+([**])'
+        x = re.search(pattern, line)
+        find = x.group()
+        replace = find.strip('*')
+        replace = '<b>' + replace + '</b>'
+        line = line.replace(find, replace)
+
+    return line
 
 def convert(*args):
     """
@@ -126,18 +141,6 @@ def convert(*args):
         for line in m:
             # Headings
             line = headings(line)
-#            if line.startswith('# '):
-#                line = '<h1>' + line[2:] + '</h1>'
-#            elif line.startswith('## '):
-#                line = '<h2>' + line[3:] + '</h2>'
-#            elif line.startswith('### '):
-#                line = '<h3>' + line[4:] + '</h3>'
-#            elif line.startswith('#### '):
-#                line = '<h4>' + line[5:] + '</h4>'
-#            elif line.startswith('##### '):
-#                line = '<h5>' + line[6:] + '</h5>'
-#            elif line.startswith('###### '):
-#                line = '<h6>' + line[7:] + '</h6>'
 
             # Unordered lists
             if line.startswith('- ') and not ul_open:
@@ -176,13 +179,14 @@ def convert(*args):
                 line = '<br/>' + line[0:]
 
             # Bold markup
-            if '**' in line:
-                pattern = '([**]).+([**])'
-                x = re.search(pattern, line)
-                find = x.group()
-                replace = find.strip('*')
-                replace = '<b>' + replace + '</b>'
-                line = line.replace(find, replace)
+            line = bold(line)
+#            if '**' in line:
+#                pattern = '([**]).+([**])'
+#                x = re.search(pattern, line)
+#                find = x.group()
+#                replace = find.strip('*')
+#                replace = '<b>' + replace + '</b>'
+#                line = line.replace(find, replace)
 
             # em markup
             if '__' in line:
