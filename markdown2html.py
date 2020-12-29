@@ -179,14 +179,13 @@ def convert(*args):
                 line = '<br/>' + line[0:]
 
             # Bold markup
-            line = bold(line)
-#            if '**' in line:
-#                pattern = '([**]).+([**])'
-#                x = re.search(pattern, line)
-#                find = x.group()
-#                replace = find.strip('*')
-#                replace = '<b>' + replace + '</b>'
-#                line = line.replace(find, replace)
+            if '**' in line:
+                pattern = '([**]).+([**])'
+                x = re.search(pattern, line)
+                find = x.group()
+                replace = find.strip('*')
+                replace = '<b>' + replace + '</b>'
+                line = line.replace(find, replace)
 
             # em markup
             if '__' in line:
