@@ -24,10 +24,8 @@ def headings(line):
             markdown: file to read
             html: file to write
     """
-    list_open = False
-
-    if not line.startswith('#'):
-        return
+    if not line.startswith('# '):
+        return line
 
     if line.startswith('# '):
         line = '<h1>' + line[2:] + '</h1>'
@@ -42,9 +40,9 @@ def headings(line):
     elif line.startswith('###### '):
         line = '<h6>' + line[7:] + '</h6>'
 
-    h.write(line)
+    return line
 
-def unordered(line):
+def unordered(line, ul_open):
     """
     Convert markdown unordered list
         Args:
@@ -124,20 +122,22 @@ def convert(*args):
     with open(markdown, 'r') as m, open(html, 'a') as h:
         ul_open = False
         ol_open = False
+        p_open = False
         for line in m:
             # Headings
-            if line.startswith('# '):
-                line = '<h1>' + line[2:] + '</h1>'
-            elif line.startswith('## '):
-                line = '<h2>' + line[3:] + '</h2>'
-            elif line.startswith('### '):
-                line = '<h3>' + line[4:] + '</h3>'
-            elif line.startswith('#### '):
-                line = '<h4>' + line[5:] + '</h4>'
-            elif line.startswith('##### '):
-                line = '<h5>' + line[6:] + '</h5>'
-            elif line.startswith('###### '):
-                line = '<h6>' + line[7:] + '</h6>'
+            line = headings(line)
+#            if line.startswith('# '):
+#                line = '<h1>' + line[2:] + '</h1>'
+#            elif line.startswith('## '):
+#                line = '<h2>' + line[3:] + '</h2>'
+#            elif line.startswith('### '):
+#                line = '<h3>' + line[4:] + '</h3>'
+#            elif line.startswith('#### '):
+#                line = '<h4>' + line[5:] + '</h4>'
+#            elif line.startswith('##### '):
+#                line = '<h5>' + line[6:] + '</h5>'
+#            elif line.startswith('###### '):
+#                line = '<h6>' + line[7:] + '</h6>'
 
             # Unordered lists
             if line.startswith('- ') and not ul_open:
@@ -157,11 +157,24 @@ def convert(*args):
             elif line.startswith('* '):
                 line = '<li>' + line[2:] + '</li>'
 
-            h.write(line)
+#            h.write(line)
 
             if line == '\n' and ol_open:
                 h.write('</ol>')
                 ol_open = False
+
+            if line[0].isalpha() and not p_open:
+                line = '<p>' + line[0:]
+                p_open = True
+
+            if line == '\n' and p_open:
+                h.write('</p>')
+                p_open = False
+
+            if line[0].isalpha() and p_open:
+                line = '<br />' + line[0:]
+
+            h.write(line)
 
         # Close lists
         if ul_open:
@@ -169,6 +182,10 @@ def convert(*args):
 
         if ol_open:
             h.write('</ol>')
+
+        # Close paragraphs
+        if p_open:
+            h.write('</p>')
 
 if __name__ == "__main__":
 
