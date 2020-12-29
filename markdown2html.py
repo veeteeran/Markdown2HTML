@@ -25,7 +25,7 @@ def headings(line):
             markdown: file to read
             html: file to write
     """
-    if not line.startswith('# '):
+    if not line.startswith('#'):
         return line
 
     if line.startswith('# '):
@@ -110,11 +110,7 @@ def paragraphs(markdown="", html=""):
 
             if not line[0].isalpha():
                 line_start = False
-                print('Not simple text')
 
-#             if line[0].isalpha() and not line_start:
-#                 line = '<p>' + line
-#                 line_start = True
 
 def convert(*args):
     """
@@ -129,19 +125,19 @@ def convert(*args):
         p_open = False
         for line in m:
             # Headings
-#            line = headings(line)
-            if line.startswith('# '):
-                line = '<h1>' + line[2:] + '</h1>'
-            elif line.startswith('## '):
-                line = '<h2>' + line[3:] + '</h2>'
-            elif line.startswith('### '):
-                line = '<h3>' + line[4:] + '</h3>'
-            elif line.startswith('#### '):
-                line = '<h4>' + line[5:] + '</h4>'
-            elif line.startswith('##### '):
-                line = '<h5>' + line[6:] + '</h5>'
-            elif line.startswith('###### '):
-                line = '<h6>' + line[7:] + '</h6>'
+            line = headings(line)
+#            if line.startswith('# '):
+#                line = '<h1>' + line[2:] + '</h1>'
+#            elif line.startswith('## '):
+#                line = '<h2>' + line[3:] + '</h2>'
+#            elif line.startswith('### '):
+#                line = '<h3>' + line[4:] + '</h3>'
+#            elif line.startswith('#### '):
+#                line = '<h4>' + line[5:] + '</h4>'
+#            elif line.startswith('##### '):
+#                line = '<h5>' + line[6:] + '</h5>'
+#            elif line.startswith('###### '):
+#                line = '<h6>' + line[7:] + '</h6>'
 
             # Unordered lists
             if line.startswith('- ') and not ul_open:
@@ -161,12 +157,11 @@ def convert(*args):
             elif line.startswith('* '):
                 line = '<li>' + line[2:] + '</li>'
 
-#            h.write(line)
-
             if line == '\n' and ol_open:
                 h.write('</ol>')
                 ol_open = False
 
+            # Checks for bold and em as paragraphs
             bold = line[0] == '*'
             em = line[0] == '_'
             if (line[0].isalpha() or bold or em) and not p_open:
@@ -180,6 +175,7 @@ def convert(*args):
             if line[0].isalpha() and p_open:
                 line = '<br/>' + line[0:]
 
+            # Bold markup
             if '**' in line:
                 pattern = '([**]).+([**])'
                 x = re.search(pattern, line)
@@ -187,7 +183,8 @@ def convert(*args):
                 replace = find.strip('*')
                 replace = '<b>' + replace + '</b>'
                 line = line.replace(find, replace)
-                
+
+            # em markup
             if '__' in line:
                 pattern = '([__]).+([__])'
                 x = re.search(pattern, line)
@@ -212,8 +209,3 @@ def convert(*args):
 if __name__ == "__main__":
 
     convert(argv)
-#    check_args(argv)
-#    headings(argv[1], argv[2])
-#    unordered(argv[1], argv[2])
-#    ordered(argv[1], argv[2])
-#    paragraphs(argv[1], argv[2])
