@@ -111,7 +111,7 @@ def paragraphs(markdown="", html=""):
             if not line[0].isalpha():
                 line_start = False
 
-def bold(line)
+def bold(line):
     """
     Convert markdown paragraphs
         Args:
