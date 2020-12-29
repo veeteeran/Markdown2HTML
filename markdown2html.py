@@ -1,6 +1,7 @@
 #!/usr/bin/python3
 """Check for proper number of args"""
 from os import path
+import re
 from sys import argv, stderr
 
 
@@ -172,7 +173,23 @@ def convert(*args):
                 p_open = False
 
             if line[0].isalpha() and p_open:
-                line = '<br />' + line[0:]
+                line = '<br/>' + line[0:]
+
+            if '**' in line:
+                pattern = '([**]).+([**])'
+                x = re.search(pattern, line)
+                find = x.group()
+                replace = find.strip('*')
+                replace = '<b>' + replace + '</b>'
+                line = line.replace(find, replace)
+                
+            if '__' in line:
+                pattern = '([__]).+([__])'
+                x = re.search(pattern, line)
+                find = x.group()
+                replace = find.strip('_')
+                replace = '<em>' + replace + '</em>'
+                line = line.replace(find, replace)
 
             h.write(line)
 
