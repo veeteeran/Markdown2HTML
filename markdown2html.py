@@ -117,6 +117,9 @@ def paragraphs(markdown="", html=""):
 #                 line_start = True
 
 def convert(*args):
+    """
+    Combines code for functions above
+    """
     check_args(args[0])
     markdown = args[0][1]
     html = args[0][2]
@@ -164,7 +167,9 @@ def convert(*args):
                 h.write('</ol>')
                 ol_open = False
 
-            if line[0].isalpha() and not p_open:
+            bold = line[0] == '*'
+            em = line[0] == '_'
+            if (line[0].isalpha() or bold or em) and not p_open:
                 line = '<p>' + line[0:]
                 p_open = True
 
