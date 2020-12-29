@@ -118,7 +118,6 @@ def paragraphs(markdown="", html=""):
 #                 line_start = True
 
 def convert(*args):
-    print(len(args))
     check_args(args[0])
     markdown = args[0][1]
     html = args[0][2]
