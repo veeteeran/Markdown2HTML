@@ -170,7 +170,8 @@ def convert(*args):
             # Checks for bold and em as paragraphs
             bold = line[0] == '*'
             em = line[0] == '_'
-            if (line[0].isalpha() or bold or em) and not p_open:
+            no_c = line[0] == '('
+            if (line[0].isalpha() or bold or em or no_c) and not p_open:
                 line = '<p>' + line[0:]
                 p_open = True
 
@@ -212,11 +213,14 @@ def convert(*args):
 
             # Remove Cc from string
             if '((' in line:
-                result = '<p>' + line.lstrip('((')
-                result = result[0:-3] + '</p>'
+                pattern = '([\(\(]).+([\)\)])'
+                x = re.search(pattern, line)
+                find = x.group()
+                result = find.lstrip('((')
+                result = result[0:-2]
                 result = result.replace('C', '')
                 result = result.replace('c', '')
-                line = line.replace(line, result)
+                line = line.replace(find, result)
 
             h.write(line)
 
