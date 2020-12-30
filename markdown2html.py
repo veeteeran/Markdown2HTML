@@ -1,5 +1,6 @@
 #!/usr/bin/python3
 """Check for proper number of args"""
+from hashlib import md5
 from os import path
 import re
 from sys import argv, stderr
@@ -196,6 +197,17 @@ def convert(*args):
                 find = x.group()
                 replace = find.strip('_')
                 replace = '<em>' + replace + '</em>'
+                line = line.replace(find, replace)
+
+            # Convert to md5
+            if '[[' in line:
+                pattern = '([\[\[]).+([\]\]])'
+                x = re.search(pattern, line)
+                find = x.group()
+                replace = find.lstrip('[[')
+                replace = find.rstrip(']]')
+                replace = md5(replace.encode())
+                replace = replace.hexdigest()
                 line = line.replace(find, replace)
 
             h.write(line)
