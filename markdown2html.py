@@ -209,7 +209,10 @@ def convert(*args):
                 replace = replace.rstrip(']]')
                 replace = md5(replace.encode())
                 replace = replace.hexdigest()
-                line = line.replace(find, replace)
+                if find == line:
+                    line = replace
+                else:
+                    line = line.replace(find, replace)
 
             # Remove Cc from string
             if '((' in line:
