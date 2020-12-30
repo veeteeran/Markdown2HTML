@@ -205,7 +205,7 @@ def convert(*args):
                 x = re.search(pattern, line)
                 find = x.group()
                 replace = find.lstrip('[[')
-                replace = find.rstrip(']]')
+                replace = replace.rstrip(']]')
                 replace = md5(replace.encode())
                 replace = replace.hexdigest()
                 line = line.replace(find, replace)
