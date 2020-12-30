@@ -210,6 +210,14 @@ def convert(*args):
                 replace = replace.hexdigest()
                 line = line.replace(find, replace)
 
+            # Remove Cc from string
+            if '((' in line:
+                result = '<p>' + line.lstrip('((')
+                result = result[0:-3] + '</p>'
+                result = result.replace('C', '')
+                result = result.replace('c', '')
+                line = line.replace(line, result)
+
             h.write(line)
 
         # Close lists
